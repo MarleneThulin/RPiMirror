@@ -4,6 +4,7 @@ from model import *
 import time
 import configparser as cfparser
 import threading
+import gpio
 
 config = cfparser.ConfigParser()
 
@@ -34,6 +35,11 @@ def run():
         threads.append(threading.Thread(target=modules[i].run))
         threads[i].setDaemon(True)
         threads[i].start()
+    
+    gpio.set(modules)
+    PIRthread = threading.Thread(target=gpio.run)
+    PIRthread.setDaemon(True)
+    PIRthread.start()
     
     mgui.start()
 
